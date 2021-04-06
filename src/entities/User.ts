@@ -5,10 +5,14 @@ import {
   BeforeInsert, BeforeUpdate,
   Column,
   CreateDateColumn,
-  Entity,
+  Entity, ManyToOne, OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
+import Chat from './Chat';
+import Message from './Message';
+import Ride from './Ride';
+import Verification from './Verification';
 
 const BCRYPT_ROUNDS = 10;
 
@@ -66,6 +70,21 @@ class User extends BaseEntity {
     return `${this.firstName} ${this.lastName}`;
   }
 
+  @ManyToOne(type => Chat, chat => chat.participants)
+  chat: Chat;
+
+  @OneToMany(type => Message, message => message.user)
+  messages: Message[];
+
+  @OneToMany(type => Verification, verification => verification.user)
+  verifications: Verification[];
+
+  @OneToMany(type => Ride, ride => ride.driver)
+  ridesAsDriver: Ride[];
+
+  @OneToMany(type => Ride, ride => ride.passenger)
+  ridesAsPassenger;
+
   @CreateDateColumn() createAt: string;
 
   @UpdateDateColumn() updateAt: string;
@@ -86,7 +105,7 @@ class User extends BaseEntity {
   public comparePassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);
   }
-  
+
 }
 
 export default User;

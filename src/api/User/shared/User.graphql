@@ -10,8 +10,13 @@ type User {
     verifiedPhoneNumber:Boolean!
     profilePhoto:String
     createAt:String!
-    updatedAt:String
+    updateAt:String
     fullName:String
+    chat:Chat
+    messages:[Message]
+    verifications:[Verification]
+    ridesAsPassenger:[Ride]
+    ridesAsDriver:[Ride]
     isDriving:Boolean!
     isRiding:Boolean!
     isTaken:Boolean!
